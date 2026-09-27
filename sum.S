@@ -5,7 +5,21 @@
 #   offset 8  : value
 #   offset 16 : next
 sum:
-    retq
+  movq $0, %rax         # rax = total = 0
+  movq %rdi, %rcx       # rcx = ptr = list
+
+.Lwhile:
+  cmpq $0, %rcx
+  je .Ldone              # if ptr is null exit loop
+
+  movq 8(%rcx), %rdx     # rdx = ptr->value - offset 8
+  addq %rdx, %rax        # total += ptr->value
+
+  movq 16(%rcx), %rcx    # ptr = ptr->next - offset 16
+  jmp .Lwhile
+
+.Ldone:
+  ret
 
 
 # sum of the elements of a linkedlist in C
